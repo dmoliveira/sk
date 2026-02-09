@@ -21,6 +21,7 @@ Usage:
   sk install
   sk uninstall
   sk version
+  sk selfcheck
   sk -h | --help
   sk -V | --version
 
@@ -31,6 +32,7 @@ Commands:
   remove    Delete a secret from macOS Keychain
   install   Install sk to ~/.local/bin/sk
   uninstall Remove sk from ~/.local/bin/sk
+  selfcheck Verify Keychain access
 
 Options:
   -k, --key     Key name (required for add/get/remove)
@@ -57,6 +59,7 @@ Examples:
   sk list
   sk list --show
   sk remove -k OPENAI_API_KEY
+  sk selfcheck
 EOF
 }
 
@@ -73,6 +76,32 @@ ensure_darwin() {
 
 print_version() {
   printf '%s %s\n' "$APP_NAME" "$VERSION"
+}
+
+parse_selfcheck() {
+  require_cmd security
+  local key="sk-selfcheck-$$" value="ok"
+  if security find-generic-password -a "$DEFAULT_USER" -s "${SERVICE_PREFIX}${key}" >/dev/null 2>&1; then
+    security delete-generic-password -a "$DEFAULT_USER" -s "${SERVICE_PREFIX}${key}" >/dev/null 2>&1 || true
+  fi
+  if ! security add-generic-password -a "$DEFAULT_USER" -s "${SERVICE_PREFIX}${key}" -w "$value" >/dev/null; then
+    error "Failed to write Keychain item"
+    exit 1
+  fi
+  local found
+  if ! found=$(security find-generic-password -a "$DEFAULT_USER" -s "${SERVICE_PREFIX}${key}" -w 2>/dev/null); then
+    error "Failed to read Keychain item"
+    exit 1
+  fi
+  if [[ "$found" != "$value" ]]; then
+    error "Unexpected value from Keychain"
+    exit 1
+  fi
+  if ! security delete-generic-password -a "$DEFAULT_USER" -s "${SERVICE_PREFIX}${key}" >/dev/null; then
+    error "Failed to clean up Keychain item"
+    exit 1
+  fi
+  printf 'Keychain access OK for user "%s"\n' "$DEFAULT_USER"
 }
 
 require_cmd() {
@@ -334,6 +363,7 @@ main() {
     uninstall) parse_uninstall "$@" ;;
     help) print_help; exit 0 ;;
     version) print_version; exit 0 ;;
+    selfcheck) parse_selfcheck "$@" ;;
     *) error "Unknown command: $cmd"; print_help; exit 1 ;;
   esac
 }
