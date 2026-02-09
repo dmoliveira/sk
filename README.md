@@ -9,7 +9,7 @@ Made by Diego Marinho de Oliveira
 ### Homebrew (tap)
 
 ```bash
-brew tap <you>/tap
+brew tap <github-user>/tap
 brew install sk
 ```
 
