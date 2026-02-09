@@ -91,6 +91,7 @@ sk --version
 
 - Uses macOS Keychain via `security`.
 - Entries are scoped to the `sk:` service prefix.
+- Override the prefix with `SK_SERVICE_PREFIX` if needed.
 
 ## License
 
