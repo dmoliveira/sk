@@ -5,6 +5,7 @@ IFS=$'\n\t'
 APP_NAME="sk"
 SERVICE_PREFIX="${SK_SERVICE_PREFIX:-sk:}"
 VERSION="0.1.0"
+DEFAULT_USER="${SK_USER:-$USER}"
 
 print_help() {
   cat <<'EOF'
@@ -44,6 +45,7 @@ Options:
 Environment:
   SK_INSTALL_DIR  Override install directory (default: ~/.local/bin)
   SK_SERVICE_PREFIX  Override service prefix (default: sk:)
+  SK_USER  Override default user (default: $USER)
 
 Examples:
   sk add -k OPENAI_API_KEY -v "sk-xxxx"
@@ -116,7 +118,7 @@ mask_value() {
 }
 
 parse_add() {
-  local key="" value="" user="${USER}" read_stdin="false"
+  local key="" value="" user="${DEFAULT_USER}" read_stdin="false"
   while [[ $# -gt 0 ]]; do
     case "$1" in
       -k|--key) key="$(require_value "$1" "$2")"; shift 2 ;;
@@ -158,7 +160,7 @@ parse_add() {
 }
 
 parse_get() {
-  local key="" user="${USER}"
+  local key="" user="${DEFAULT_USER}"
   while [[ $# -gt 0 ]]; do
     case "$1" in
       -k|--key) key="$(require_value "$1" "$2")"; shift 2 ;;
@@ -182,7 +184,7 @@ parse_get() {
 }
 
 parse_list() {
-  local user="${USER}" keys_only="false"
+  local user="${DEFAULT_USER}" keys_only="false"
   while [[ $# -gt 0 ]]; do
     case "$1" in
       -u|--user) user="$(require_value "$1" "$2")"; shift 2 ;;
@@ -222,7 +224,7 @@ parse_list() {
 }
 
 parse_remove() {
-  local key="" user="${USER}" yes="false"
+  local key="" user="${DEFAULT_USER}" yes="false"
   while [[ $# -gt 0 ]]; do
     case "$1" in
       -k|--key) key="$(require_value "$1" "$2")"; shift 2 ;;

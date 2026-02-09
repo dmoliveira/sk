@@ -101,6 +101,7 @@ sk --version
 - macOS only.
 - Entries are scoped to the `sk:` service prefix.
 - Override the prefix with `SK_SERVICE_PREFIX` if needed.
+- Override the default user with `SK_USER` if needed.
 
 ## License
 
