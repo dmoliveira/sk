@@ -101,6 +101,12 @@ Version:
 sk --version
 ```
 
+Self-check:
+
+```bash
+sk selfcheck
+```
+
 ## Notes
 
 - Uses macOS Keychain via `security`.
@@ -113,6 +119,12 @@ sk --version
 ## Security
 
 - Prefer `--stdin` to avoid secrets in shell history.
+
+## Testing
+
+```bash
+./scripts/smoke.sh
+```
 
 ## License
 
