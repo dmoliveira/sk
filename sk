@@ -206,16 +206,17 @@ parse_list() {
   local svc key value masked
   while IFS= read -r svc; do
     key="${svc#${SERVICE_PREFIX}}"
+    if [[ "$keys_only" == "true" ]]; then
+      printf '%s\n' "$key"
+      printed=1
+      continue
+    fi
     value=""
     if ! value=$(security find-generic-password -a "$user" -s "$svc" -w 2>/dev/null); then
       continue
     fi
-    if [[ "$keys_only" == "true" ]]; then
-      printf '%s\n' "$key"
-    else
-      masked=$(mask_value "$value")
-      printf '%s\t%s\n' "$key" "$masked"
-    fi
+    masked=$(mask_value "$value")
+    printf '%s\t%s\n' "$key" "$masked"
     printed=1
   done <<< "$services"
   if [[ "$printed" -eq 0 ]]; then

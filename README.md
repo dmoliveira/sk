@@ -102,6 +102,7 @@ sk --version
 - Entries are scoped to the `sk:` service prefix.
 - Override the prefix with `SK_SERVICE_PREFIX` if needed.
 - Override the default user with `SK_USER` if needed.
+- `sk list --keys` does not access secret values.
 
 ## License
 
