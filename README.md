@@ -81,6 +81,12 @@ Uninstall:
 sk uninstall
 ```
 
+Version:
+
+```bash
+sk --version
+```
+
 ## Notes
 
 - Uses macOS Keychain via `security`.
