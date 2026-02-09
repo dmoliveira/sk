@@ -147,10 +147,18 @@ parse_add() {
       error "No value provided on stdin"
       exit 1
     fi
+    if [[ -z "$value" ]]; then
+      error "Empty value provided on stdin"
+      exit 1
+    fi
   fi
   if [[ "$value" == "-" ]]; then
     if ! IFS= read -r value; then
       error "No value provided on stdin"
+      exit 1
+    fi
+    if [[ -z "$value" ]]; then
+      error "Empty value provided on stdin"
       exit 1
     fi
   fi
