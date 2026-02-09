@@ -57,10 +57,22 @@ List secrets (masked):
 sk list
 ```
 
+List only keys:
+
+```bash
+sk list --keys
+```
+
 Remove a secret:
 
 ```bash
 sk remove -k OPENAI_API_KEY
+```
+
+Skip confirmation:
+
+```bash
+sk remove -k OPENAI_API_KEY -y
 ```
 
 Uninstall:
