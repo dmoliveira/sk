@@ -1,0 +1,214 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+AUTHOR="Diego Marinho de Oliveira"
+APP_NAME="sk"
+SERVICE_PREFIX="sk:"
+
+print_help() {
+  cat <<'EOF'
+sk - macOS Keychain helper for storing secrets by key
+
+Made by Diego Marinho de Oliveira
+
+Usage:
+  sk add -k KEY -v VALUE [-u USER]
+  sk get -k KEY [-u USER]
+  sk list [-u USER]
+  sk remove -k KEY [-u USER] [-y]
+  sk install
+  sk uninstall
+  sk -h | --help
+
+Commands:
+  add       Store a secret in macOS Keychain
+  get       Read a secret from macOS Keychain
+  list      List sk entries (masked)
+  remove    Delete a secret from macOS Keychain
+  install   Install sk to ~/.local/bin/sk
+  uninstall Remove sk from ~/.local/bin/sk
+
+Options:
+  -k, --key     Key name (required for add/get/remove)
+  -v, --value   Secret value (required for add)
+  -u, --user    Account name (default: $USER)
+  -y, --yes     Skip confirmation for remove
+  -h, --help    Show this help
+
+Examples:
+  sk add -k OPENAI_API_KEY -v "sk-xxxx"
+  export OPENAI_API_KEY=$(sk get -k OPENAI_API_KEY)
+  sk list
+  sk remove -k OPENAI_API_KEY
+EOF
+}
+
+error() {
+  printf 'Error: %s\n' "$1" >&2
+}
+
+require_cmd() {
+  command -v "$1" >/dev/null 2>&1 || { error "Missing dependency: $1"; exit 1; }
+}
+
+script_path() {
+  local dir
+  dir="$(cd "$(dirname "$0")" && pwd)"
+  printf '%s/%s\n' "$dir" "$(basename "$0")"
+}
+
+mask_value() {
+  local value="$1"
+  if [[ -z "$value" ]]; then
+    printf '****\n'
+    return
+  fi
+  if [[ ${#value} -le 4 ]]; then
+    printf '%s****\n' "$value"
+    return
+  fi
+  printf '%s****\n' "${value:0:4}"
+}
+
+parse_add() {
+  local key="" value="" user="${USER}"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -k|--key) key="$2"; shift 2 ;;
+      -v|--value) value="$2"; shift 2 ;;
+      -u|--user) user="$2"; shift 2 ;;
+      -h|--help) print_help; exit 0 ;;
+      *) error "Unknown option: $1"; exit 1 ;;
+    esac
+  done
+  if [[ -z "$key" || -z "$value" ]]; then
+    error "add requires -k KEY and -v VALUE"
+    exit 1
+  fi
+  require_cmd security
+  security add-generic-password -a "$user" -s "${SERVICE_PREFIX}${key}" -w "$value" -U >/dev/null
+  printf 'Stored key "%s" for user "%s"\n' "$key" "$user"
+}
+
+parse_get() {
+  local key="" user="${USER}"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -k|--key) key="$2"; shift 2 ;;
+      -u|--user) user="$2"; shift 2 ;;
+      -h|--help) print_help; exit 0 ;;
+      *) error "Unknown option: $1"; exit 1 ;;
+    esac
+  done
+  if [[ -z "$key" ]]; then
+    error "get requires -k KEY"
+    exit 1
+  fi
+  require_cmd security
+  security find-generic-password -a "$user" -s "${SERVICE_PREFIX}${key}" -w 2>/dev/null
+}
+
+parse_list() {
+  local user="${USER}"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -u|--user) user="$2"; shift 2 ;;
+      -h|--help) print_help; exit 0 ;;
+      *) error "Unknown option: $1"; exit 1 ;;
+    esac
+  done
+  require_cmd security
+  local services
+  services=$(security dump-keychain 2>/dev/null | awk -F'"' '/"svce"<blob>="/ {print $2}' | grep '^sk:' | sort -u || true)
+  if [[ -z "$services" ]]; then
+    printf 'No sk entries found.\n'
+    return
+  fi
+  local svc key value masked
+  while IFS= read -r svc; do
+    key="${svc#${SERVICE_PREFIX}}"
+    value=""
+    if ! value=$(security find-generic-password -a "$user" -s "$svc" -w 2>/dev/null); then
+      continue
+    fi
+    masked=$(mask_value "$value")
+    printf '%s\t%s\n' "$key" "$masked"
+  done <<< "$services"
+}
+
+parse_remove() {
+  local key="" user="${USER}" yes="false"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -k|--key) key="$2"; shift 2 ;;
+      -u|--user) user="$2"; shift 2 ;;
+      -y|--yes) yes="true"; shift ;;
+      -h|--help) print_help; exit 0 ;;
+      *) error "Unknown option: $1"; exit 1 ;;
+    esac
+  done
+  if [[ -z "$key" ]]; then
+    error "remove requires -k KEY"
+    exit 1
+  fi
+  require_cmd security
+  if [[ "$yes" != "true" ]]; then
+    read -r -p "Remove key '$key' for user '$user'? [y/N] " confirm
+    case "$confirm" in
+      y|Y) ;;
+      *) printf 'Aborted.\n'; exit 1 ;;
+    esac
+  fi
+  security delete-generic-password -a "$user" -s "${SERVICE_PREFIX}${key}" >/dev/null
+  printf 'Removed key "%s" for user "%s"\n' "$key" "$user"
+}
+
+parse_install() {
+  local dest_dir dest src
+  dest_dir="${SK_INSTALL_DIR:-$HOME/.local/bin}"
+  dest="${dest_dir}/${APP_NAME}"
+  src="$(script_path)"
+  mkdir -p "$dest_dir"
+  cp "$src" "$dest"
+  chmod +x "$dest"
+  case ":$PATH:" in
+    *":$dest_dir:"*) printf 'Installed %s to %s\n' "$APP_NAME" "$dest" ;;
+    *)
+      printf 'Installed %s to %s\n' "$APP_NAME" "$dest"
+      printf 'Add %s to your PATH: export PATH="%s:$PATH"\n' "$dest_dir" "$dest_dir"
+      ;;
+  esac
+}
+
+parse_uninstall() {
+  local dest_dir dest
+  dest_dir="${SK_INSTALL_DIR:-$HOME/.local/bin}"
+  dest="${dest_dir}/${APP_NAME}"
+  if [[ -f "$dest" ]]; then
+    rm -f "$dest"
+    printf 'Removed %s from %s\n' "$APP_NAME" "$dest"
+  else
+    printf 'No install found at %s\n' "$dest"
+  fi
+}
+
+main() {
+  local cmd="${1:-}"
+  if [[ -z "$cmd" || "$cmd" == "-h" || "$cmd" == "--help" ]]; then
+    print_help
+    exit 0
+  fi
+  shift || true
+  case "$cmd" in
+    add) parse_add "$@" ;;
+    get) parse_get "$@" ;;
+    list) parse_list "$@" ;;
+    remove|rm|delete) parse_remove "$@" ;;
+    install) parse_install "$@" ;;
+    uninstall) parse_uninstall "$@" ;;
+    *) error "Unknown command: $cmd"; print_help; exit 1 ;;
+  esac
+}
+
+main "$@"
