@@ -40,6 +40,7 @@ Environment:
 
 Examples:
   sk add -k OPENAI_API_KEY -v "sk-xxxx"
+  printf '%s' "sk-xxxx" | sk add -k OPENAI_API_KEY -v -
   export OPENAI_API_KEY=$(sk get -k OPENAI_API_KEY)
   sk list
   sk remove -k OPENAI_API_KEY
@@ -96,6 +97,12 @@ parse_add() {
   if [[ -z "$key" || -z "$value" ]]; then
     error "add requires -k KEY and -v VALUE"
     exit 1
+  fi
+  if [[ "$value" == "-" ]]; then
+    if ! IFS= read -r value; then
+      error "No value provided on stdin"
+      exit 1
+    fi
   fi
   require_cmd security
   security add-generic-password -a "$user" -s "${SERVICE_PREFIX}${key}" -w "$value" -U >/dev/null
