@@ -3,7 +3,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 APP_NAME="sk"
-SERVICE_PREFIX="sk:"
+SERVICE_PREFIX="${SK_SERVICE_PREFIX:-sk:}"
 VERSION="0.1.0"
 
 print_help() {
@@ -42,6 +42,7 @@ Options:
 
 Environment:
   SK_INSTALL_DIR  Override install directory (default: ~/.local/bin)
+  SK_SERVICE_PREFIX  Override service prefix (default: sk:)
 
 Examples:
   sk add -k OPENAI_API_KEY -v "sk-xxxx"
@@ -233,6 +234,10 @@ parse_install() {
   dest_dir="${SK_INSTALL_DIR:-$HOME/.local/bin}"
   dest="${dest_dir}/${APP_NAME}"
   src="$(script_path)"
+  if [[ "$src" == "$dest" ]]; then
+    printf '%s is already installed at %s\n' "$APP_NAME" "$dest"
+    exit 0
+  fi
   mkdir -p "$dest_dir"
   cp "$src" "$dest"
   chmod +x "$dest"
