@@ -16,7 +16,7 @@ Made by Diego Marinho de Oliveira
 Usage:
   sk add -k KEY -v VALUE [-u USER]
   sk get -k KEY [-u USER]
-  sk list [-u USER] [--keys]
+  sk list [-u USER] [--keys|--show]
   sk remove -k KEY [-u USER] [-y]
   sk install
   sk uninstall
@@ -27,7 +27,7 @@ Usage:
 Commands:
   add       Store a secret in macOS Keychain
   get       Read a secret from macOS Keychain
-  list      List sk entries (masked)
+  list      List sk entries (keys by default)
   remove    Delete a secret from macOS Keychain
   install   Install sk to ~/.local/bin/sk
   uninstall Remove sk from ~/.local/bin/sk
@@ -40,7 +40,9 @@ Options:
   -y, --yes     Skip confirmation for remove
   -h, --help    Show this help
   -V, --version Show version
-  --keys        List keys only (list command)
+  --keys        List keys only (list command, default)
+  --show        Show masked values (list command)
+  -f, --force   Overwrite existing key (add command)
 
 Environment:
   SK_INSTALL_DIR  Override install directory (default: ~/.local/bin)
@@ -53,7 +55,7 @@ Examples:
   printf '%s' "sk-xxxx" | sk add -k OPENAI_API_KEY -v -
   export OPENAI_API_KEY=$(sk get -k OPENAI_API_KEY)
   sk list
-  sk list --keys
+  sk list --show
   sk remove -k OPENAI_API_KEY
 EOF
 }
@@ -118,12 +120,13 @@ mask_value() {
 }
 
 parse_add() {
-  local key="" value="" user="${DEFAULT_USER}" read_stdin="false"
+  local key="" value="" user="${DEFAULT_USER}" read_stdin="false" force="false"
   while [[ $# -gt 0 ]]; do
     case "$1" in
       -k|--key) key="$(require_value "$1" "$2")"; shift 2 ;;
       -v|--value) value="$(require_value "$1" "$2")"; shift 2 ;;
       --stdin) read_stdin="true"; shift ;;
+      -f|--force) force="true"; shift ;;
       -u|--user) user="$(require_value "$1" "$2")"; shift 2 ;;
       -h|--help) print_help; exit 0 ;;
       *) error "Unknown option: $1"; exit 1 ;;
@@ -163,7 +166,17 @@ parse_add() {
     fi
   fi
   require_cmd security
-  security add-generic-password -a "$user" -s "${SERVICE_PREFIX}${key}" -w "$value" -U >/dev/null
+  if security find-generic-password -a "$user" -s "${SERVICE_PREFIX}${key}" >/dev/null 2>&1; then
+    if [[ "$force" != "true" ]]; then
+      error "Key exists: $key (use --force to overwrite)"
+      exit 1
+    fi
+  fi
+  if [[ "$force" == "true" ]]; then
+    security add-generic-password -a "$user" -s "${SERVICE_PREFIX}${key}" -w "$value" -U >/dev/null
+  else
+    security add-generic-password -a "$user" -s "${SERVICE_PREFIX}${key}" -w "$value" >/dev/null
+  fi
   printf 'Stored key "%s" for user "%s"\n' "$key" "$user"
 }
 
@@ -192,11 +205,12 @@ parse_get() {
 }
 
 parse_list() {
-  local user="${DEFAULT_USER}" keys_only="false"
+  local user="${DEFAULT_USER}" keys_only="true" show_values="false"
   while [[ $# -gt 0 ]]; do
     case "$1" in
       -u|--user) user="$(require_value "$1" "$2")"; shift 2 ;;
-      --keys) keys_only="true"; shift ;;
+      --keys) keys_only="true"; show_values="false"; shift ;;
+      --show) keys_only="false"; show_values="true"; shift ;;
       -h|--help) print_help; exit 0 ;;
       *) error "Unknown option: $1"; exit 1 ;;
     esac
@@ -217,6 +231,9 @@ parse_list() {
     if [[ "$keys_only" == "true" ]]; then
       printf '%s\n' "$key"
       printed=1
+      continue
+    fi
+    if [[ "$show_values" != "true" ]]; then
       continue
     fi
     value=""

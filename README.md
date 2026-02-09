@@ -41,6 +41,12 @@ Store a secret:
 sk add -k OPENAI_API_KEY -v "sk-xxxx"
 ```
 
+Overwrite an existing key:
+
+```bash
+sk add -k OPENAI_API_KEY -v "sk-xxxx" --force
+```
+
 Avoid shell history by piping the value:
 
 ```bash
@@ -59,16 +65,16 @@ Read a secret (prints only the value):
 export OPENAI_API_KEY=$(sk get -k OPENAI_API_KEY)
 ```
 
-List secrets (masked):
+List keys (default):
 
 ```bash
 sk list
 ```
 
-List only keys:
+Show masked values (may prompt Keychain access):
 
 ```bash
-sk list --keys
+sk list --show
 ```
 
 Remove a secret:
@@ -102,7 +108,7 @@ sk --version
 - Entries are scoped to the `sk:` service prefix.
 - Override the prefix with `SK_SERVICE_PREFIX` if needed.
 - Override the default user with `SK_USER` if needed.
-- `sk list --keys` does not access secret values.
+- `sk list` does not access secret values.
 
 ## Security
 
