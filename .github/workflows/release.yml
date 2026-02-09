@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Compute tarball SHA256
+        id: sha
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          repo="${GITHUB_REPOSITORY}"
+          url="https://github.com/${repo}/archive/refs/tags/${tag}.tar.gz"
+          curl -fsSL "$url" -o /tmp/sk.tar.gz
+          sha=$(sha256sum /tmp/sk.tar.gz | awk '{print $1}')
+          echo "sha256=$sha" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: |
+            ## Homebrew formula
+            ```
+            url "https://github.com/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.tar.gz"
+            sha256 "${{ steps.sha.outputs.sha256 }}"
+            ```
