@@ -45,6 +45,12 @@ Avoid shell history by piping the value:
 printf '%s' "sk-xxxx" | sk add -k OPENAI_API_KEY -v -
 ```
 
+Or use `--stdin`:
+
+```bash
+printf '%s' "sk-xxxx" | sk add -k OPENAI_API_KEY --stdin
+```
+
 Read a secret (prints only the value):
 
 ```bash
@@ -90,6 +96,7 @@ sk --version
 ## Notes
 
 - Uses macOS Keychain via `security`.
+- macOS only.
 - Entries are scoped to the `sk:` service prefix.
 - Override the prefix with `SK_SERVICE_PREFIX` if needed.
 
