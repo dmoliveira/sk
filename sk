@@ -64,6 +64,18 @@ require_value() {
   printf '%s' "$val"
 }
 
+validate_key() {
+  local key="$1"
+  if [[ -z "$key" ]]; then
+    error "Key cannot be empty"
+    exit 1
+  fi
+  if [[ "$key" =~ [[:space:]] ]]; then
+    error "Key cannot contain whitespace"
+    exit 1
+  fi
+}
+
 script_path() {
   local dir
   dir="$(cd "$(dirname "$0")" && pwd)"
@@ -98,6 +110,7 @@ parse_add() {
     error "add requires -k KEY and -v VALUE"
     exit 1
   fi
+  validate_key "$key"
   if [[ "$value" == "-" ]]; then
     if ! IFS= read -r value; then
       error "No value provided on stdin"
@@ -123,6 +136,7 @@ parse_get() {
     error "get requires -k KEY"
     exit 1
   fi
+  validate_key "$key"
   require_cmd security
   local value
   if ! value=$(security find-generic-password -a "$user" -s "${SERVICE_PREFIX}${key}" -w 2>/dev/null); then
@@ -180,6 +194,7 @@ parse_remove() {
     error "remove requires -k KEY"
     exit 1
   fi
+  validate_key "$key"
   require_cmd security
   if [[ "$yes" != "true" ]]; then
     read -r -p "Remove key '$key' for user '$user'? [y/N] " confirm
