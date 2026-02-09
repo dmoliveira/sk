@@ -2,7 +2,6 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-AUTHOR="Diego Marinho de Oliveira"
 APP_NAME="sk"
 SERVICE_PREFIX="sk:"
 
@@ -136,7 +135,8 @@ parse_list() {
     esac
   done
   require_cmd security
-  local services
+  local services printed
+  printed=0
   services=$(security dump-keychain 2>/dev/null | awk -F'"' '/"svce"<blob>="/ {print $2}' | grep '^sk:' | sort -u || true)
   if [[ -z "$services" ]]; then
     printf 'No sk entries found.\n'
@@ -151,7 +151,11 @@ parse_list() {
     fi
     masked=$(mask_value "$value")
     printf '%s\t%s\n' "$key" "$masked"
+    printed=1
   done <<< "$services"
+  if [[ "$printed" -eq 0 ]]; then
+    printf 'No sk entries found for user "%s".\n' "$user"
+  fi
 }
 
 parse_remove() {
@@ -177,7 +181,10 @@ parse_remove() {
       *) printf 'Aborted.\n'; exit 1 ;;
     esac
   fi
-  security delete-generic-password -a "$user" -s "${SERVICE_PREFIX}${key}" >/dev/null
+  if ! security delete-generic-password -a "$user" -s "${SERVICE_PREFIX}${key}" >/dev/null; then
+    error "Key not found: $key"
+    exit 1
+  fi
   printf 'Removed key "%s" for user "%s"\n' "$key" "$user"
 }
 
