@@ -19,6 +19,12 @@ brew install sk
 ./sk install
 ```
 
+Override install location:
+
+```bash
+SK_INSTALL_DIR="$HOME/bin" ./sk install
+```
+
 If `~/.local/bin` is not in your PATH:
 
 ```bash
@@ -49,6 +55,12 @@ Remove a secret:
 
 ```bash
 sk remove -k OPENAI_API_KEY
+```
+
+Uninstall:
+
+```bash
+sk uninstall
 ```
 
 ## Notes
