@@ -36,6 +36,9 @@ Options:
   -y, --yes     Skip confirmation for remove
   -h, --help    Show this help
 
+Environment:
+  SK_INSTALL_DIR  Override install directory (default: ~/.local/bin)
+
 Examples:
   sk add -k OPENAI_API_KEY -v "sk-xxxx"
   export OPENAI_API_KEY=$(sk get -k OPENAI_API_KEY)
@@ -50,6 +53,15 @@ error() {
 
 require_cmd() {
   command -v "$1" >/dev/null 2>&1 || { error "Missing dependency: $1"; exit 1; }
+}
+
+require_value() {
+  local opt="$1" val="${2:-}"
+  if [[ -z "$val" ]]; then
+    error "Missing value for $opt"
+    exit 1
+  fi
+  printf '%s' "$val"
 }
 
 script_path() {
@@ -75,9 +87,9 @@ parse_add() {
   local key="" value="" user="${USER}"
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      -k|--key) key="$2"; shift 2 ;;
-      -v|--value) value="$2"; shift 2 ;;
-      -u|--user) user="$2"; shift 2 ;;
+      -k|--key) key="$(require_value "$1" "$2")"; shift 2 ;;
+      -v|--value) value="$(require_value "$1" "$2")"; shift 2 ;;
+      -u|--user) user="$(require_value "$1" "$2")"; shift 2 ;;
       -h|--help) print_help; exit 0 ;;
       *) error "Unknown option: $1"; exit 1 ;;
     esac
@@ -95,8 +107,8 @@ parse_get() {
   local key="" user="${USER}"
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      -k|--key) key="$2"; shift 2 ;;
-      -u|--user) user="$2"; shift 2 ;;
+      -k|--key) key="$(require_value "$1" "$2")"; shift 2 ;;
+      -u|--user) user="$(require_value "$1" "$2")"; shift 2 ;;
       -h|--help) print_help; exit 0 ;;
       *) error "Unknown option: $1"; exit 1 ;;
     esac
@@ -106,14 +118,19 @@ parse_get() {
     exit 1
   fi
   require_cmd security
-  security find-generic-password -a "$user" -s "${SERVICE_PREFIX}${key}" -w 2>/dev/null
+  local value
+  if ! value=$(security find-generic-password -a "$user" -s "${SERVICE_PREFIX}${key}" -w 2>/dev/null); then
+    error "Key not found: $key"
+    exit 1
+  fi
+  printf '%s\n' "$value"
 }
 
 parse_list() {
   local user="${USER}"
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      -u|--user) user="$2"; shift 2 ;;
+      -u|--user) user="$(require_value "$1" "$2")"; shift 2 ;;
       -h|--help) print_help; exit 0 ;;
       *) error "Unknown option: $1"; exit 1 ;;
     esac
@@ -141,8 +158,8 @@ parse_remove() {
   local key="" user="${USER}" yes="false"
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      -k|--key) key="$2"; shift 2 ;;
-      -u|--user) user="$2"; shift 2 ;;
+      -k|--key) key="$(require_value "$1" "$2")"; shift 2 ;;
+      -u|--user) user="$(require_value "$1" "$2")"; shift 2 ;;
       -y|--yes) yes="true"; shift ;;
       -h|--help) print_help; exit 0 ;;
       *) error "Unknown option: $1"; exit 1 ;;
