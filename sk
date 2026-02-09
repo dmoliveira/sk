@@ -4,6 +4,7 @@ IFS=$'\n\t'
 
 APP_NAME="sk"
 SERVICE_PREFIX="sk:"
+VERSION="0.1.0"
 
 print_help() {
   cat <<'EOF'
@@ -18,7 +19,9 @@ Usage:
   sk remove -k KEY [-u USER] [-y]
   sk install
   sk uninstall
+  sk version
   sk -h | --help
+  sk -V | --version
 
 Commands:
   add       Store a secret in macOS Keychain
@@ -34,6 +37,7 @@ Options:
   -u, --user    Account name (default: $USER)
   -y, --yes     Skip confirmation for remove
   -h, --help    Show this help
+  -V, --version Show version
   --keys        List keys only (list command)
 
 Environment:
@@ -51,6 +55,10 @@ EOF
 
 error() {
   printf 'Error: %s\n' "$1" >&2
+}
+
+print_version() {
+  printf '%s %s\n' "$APP_NAME" "$VERSION"
 }
 
 require_cmd() {
@@ -255,6 +263,10 @@ main() {
     print_help
     exit 0
   fi
+  if [[ "$cmd" == "-V" || "$cmd" == "--version" ]]; then
+    print_version
+    exit 0
+  fi
   shift || true
   case "$cmd" in
     add) parse_add "$@" ;;
@@ -264,6 +276,7 @@ main() {
     install) parse_install "$@" ;;
     uninstall) parse_uninstall "$@" ;;
     help) print_help; exit 0 ;;
+    version) print_version; exit 0 ;;
     *) error "Unknown command: $cmd"; print_help; exit 1 ;;
   esac
 }
