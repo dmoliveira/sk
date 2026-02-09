@@ -39,6 +39,12 @@ Store a secret:
 sk add -k OPENAI_API_KEY -v "sk-xxxx"
 ```
 
+Avoid shell history by piping the value:
+
+```bash
+printf '%s' "sk-xxxx" | sk add -k OPENAI_API_KEY -v -
+```
+
 Read a secret (prints only the value):
 
 ```bash
