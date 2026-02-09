@@ -104,6 +104,10 @@ sk --version
 - Override the default user with `SK_USER` if needed.
 - `sk list --keys` does not access secret values.
 
+## Security
+
+- Prefer `--stdin` to avoid secrets in shell history.
+
 ## License
 
 MIT
