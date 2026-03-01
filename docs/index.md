@@ -17,6 +17,12 @@ If these docs and tools save you time, consider supporting the project:
 - Use separate keys per environment and rotate them on a schedule.
 - Revoke and replace immediately if logs or traces may have exposed data.
 
+## Security & Trust Links
+
+- [Security guide](./security-for-ai-agents.md)
+- [Agent FAQ](./agent-security-faq.md)
+- [Checklist card](./agent-security-checklist.md)
+
 ## Quick Links
 
 - Main README: `../README.md`
