@@ -1,0 +1,10 @@
+[package]
+name = "sk"
+version = "0.2.0"
+edition = "2021"
+description = "Minimal macOS Keychain CLI for storing and retrieving secrets by key"
+license = "MIT"
+repository = "https://github.com/dmoliveira/sk"
+
+[dependencies]
+clap = { version = "4.5.32", features = ["derive"] }

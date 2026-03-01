@@ -1,1 +1,3 @@
 .beads/
+target/
+.DS_Store
