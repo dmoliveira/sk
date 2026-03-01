@@ -23,6 +23,7 @@ If these docs and tools save you time, consider supporting the project:
 - CLI contract: `./specs/cli-contract.md`
 - Release dashboard: `./release.md`
 - Security guide: `./security-for-ai-agents.md`
+- Agent security FAQ: `./agent-security-faq.md`
 - Changelog: `../CHANGELOG.md`
 - Release checklist: `../RELEASE.md`
 - Support page: `./support-the-project.md`
