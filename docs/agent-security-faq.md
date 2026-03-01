@@ -24,3 +24,7 @@ and tool outputs that could reveal secret material.
 
 Rotate on schedule (for example monthly), rotate after role changes, and rotate
 immediately after suspected exposure. Revoke old keys in the same runbook.
+
+## Quick companion
+
+- Security checklist card: `./agent-security-checklist.md`

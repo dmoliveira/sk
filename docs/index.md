@@ -24,6 +24,7 @@ If these docs and tools save you time, consider supporting the project:
 - Release dashboard: `./release.md`
 - Security guide: `./security-for-ai-agents.md`
 - Agent security FAQ: `./agent-security-faq.md`
+- Security checklist card: `./agent-security-checklist.md`
 - Changelog: `../CHANGELOG.md`
 - Release checklist: `../RELEASE.md`
 - Support page: `./support-the-project.md`
