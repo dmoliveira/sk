@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="420" viewBox="0 0 1400 420" role="img" aria-labelledby="title desc">
+  <title id="title">sk hero banner</title>
+  <desc id="desc">Colorful hero banner for sk keychain CLI</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#042f2e"/>
+      <stop offset="45%" stop-color="#0f766e"/>
+      <stop offset="100%" stop-color="#14b8a6"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fef3c7" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#fde68a" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="420" fill="url(#bg)"/>
+  <circle cx="240" cy="330" r="230" fill="#042f2e" opacity="0.3"/>
+  <circle cx="1240" cy="40" r="180" fill="#99f6e4" opacity="0.18"/>
+  <rect x="80" y="86" width="1240" height="248" rx="28" fill="#032e2f" opacity="0.5"/>
+  <rect x="110" y="118" width="860" height="22" rx="11" fill="url(#shine)"/>
+  <text x="110" y="210" fill="#f0fdfa" font-family="Avenir Next, Futura, Trebuchet MS, sans-serif" font-size="72" font-weight="700">sk • macOS Keychain CLI</text>
+  <text x="110" y="258" fill="#ccfbf1" font-family="Avenir Next, Futura, Trebuchet MS, sans-serif" font-size="28">Store, fetch, list, and rotate local secrets with a fast Rust binary.</text>
+  <g transform="translate(1030,120)">
+    <rect width="250" height="190" rx="24" fill="#f0fdfa" opacity="0.95"/>
+    <path d="M82 90c0-26 21-47 47-47s47 21 47 47v18h20v40H61v-40h21V90zm23 0v18h48V90c0-13-11-24-24-24s-24 11-24 24z" fill="#0f766e"/>
+    <text x="125" y="172" text-anchor="middle" fill="#115e59" font-family="Avenir Next, Futura, Trebuchet MS, sans-serif" font-size="22" font-weight="700">security(1)</text>
+  </g>
+</svg>

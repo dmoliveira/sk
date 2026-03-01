@@ -1,10 +1,38 @@
-# sk
+# sk 🔐⚡
 
-Minimal macOS Keychain CLI for storing and retrieving secrets by key.
+![sk Hero Banner](docs/assets/hero-banner.svg)
 
-Made by Diego Marinho de Oliveira
+[![CI](https://github.com/dmoliveira/sk/actions/workflows/ci.yml/badge.svg)](https://github.com/dmoliveira/sk/actions/workflows/ci.yml)
+[![Release](https://github.com/dmoliveira/sk/actions/workflows/release.yml/badge.svg)](https://github.com/dmoliveira/sk/actions/workflows/release.yml)
+[![Docs Site](https://img.shields.io/badge/docs-github_pages-0ea5e9)](https://dmoliveira.github.io/sk/)
+[![Wiki](https://img.shields.io/badge/wiki-project-22c55e)](https://github.com/dmoliveira/sk/wiki)
+[![License: MIT](https://img.shields.io/badge/License-MIT-16a34a.svg)](LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/dmoliveira/sk)](https://github.com/dmoliveira/sk/commits/main)
+[![Open Issues](https://img.shields.io/github/issues/dmoliveira/sk)](https://github.com/dmoliveira/sk/issues)
+[![Stars](https://img.shields.io/github/stars/dmoliveira/sk?style=social)](https://github.com/dmoliveira/sk/stargazers)
+[![Support via Stripe](https://img.shields.io/badge/support-stripe-635bff?logo=stripe&logoColor=white)](https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00)
 
-## Install
+A fast Rust CLI for macOS Keychain: add, fetch, list, rotate, and remove local secrets by key.
+
+Made by Diego Marinho de Oliveira.
+
+Hero asset note: `docs/assets/hero-banner.svg` is an editable SVG derived from a GPT-Image-1.5 style prompt for this project identity.
+
+## Quick Start 🚀
+
+```bash
+cargo build --release
+./target/release/sk --version
+```
+
+Store and read a value:
+
+```bash
+./target/release/sk add -k OPENAI_API_KEY --stdin --force <<<"sk-xxxx"
+./target/release/sk get -k OPENAI_API_KEY
+```
+
+## Install 📦
 
 ### Homebrew (tap)
 
@@ -13,56 +41,57 @@ brew tap dmoliveira/tap
 brew install sk
 ```
 
-If you are creating your own tap, see `TAP.md`.
+If you are building your own tap, see `TAP.md`.
 
-### Local install
+### Cargo (recommended for contributors)
 
 ```bash
-./sk install
+cargo install --path .
+```
+
+### Local install command
+
+```bash
+cargo build --release
+./target/release/sk install
 ```
 
 Override install location:
 
 ```bash
-SK_INSTALL_DIR="$HOME/bin" ./sk install
+SK_INSTALL_DIR="$HOME/bin" ./target/release/sk install
 ```
 
-If `~/.local/bin` is not in your PATH:
+If `~/.local/bin` is not in your `PATH`:
 
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-## Usage
+## Usage 🧰
 
-Store a secret:
+Add secret:
 
 ```bash
 sk add -k OPENAI_API_KEY -v "sk-xxxx"
 ```
 
-Overwrite an existing key:
-
-```bash
-sk add -k OPENAI_API_KEY -v "sk-xxxx" --force
-```
-
-Avoid shell history by piping the value:
-
-```bash
-printf '%s' "sk-xxxx" | sk add -k OPENAI_API_KEY -v -
-```
-
-Or use `--stdin`:
+Add from stdin (safer for shell history):
 
 ```bash
 printf '%s' "sk-xxxx" | sk add -k OPENAI_API_KEY --stdin
 ```
 
-Read a secret (prints only the value):
+Overwrite existing key:
 
 ```bash
-export OPENAI_API_KEY=$(sk get -k OPENAI_API_KEY)
+sk add -k OPENAI_API_KEY -v "sk-xxxx" --force
+```
+
+Read secret:
+
+```bash
+export OPENAI_API_KEY="$(sk get -k OPENAI_API_KEY)"
 ```
 
 List keys (default):
@@ -71,61 +100,54 @@ List keys (default):
 sk list
 ```
 
-Show masked values (may prompt Keychain access):
+List masked values:
 
 ```bash
 sk list --show
 ```
 
-Remove a secret:
-
-```bash
-sk remove -k OPENAI_API_KEY
-```
-
-Skip confirmation:
+Remove a key:
 
 ```bash
 sk remove -k OPENAI_API_KEY -y
 ```
 
-Uninstall:
-
-```bash
-sk uninstall
-```
-
-Version:
-
-```bash
-sk --version
-```
-
-Self-check:
+Run keychain self-check:
 
 ```bash
 sk selfcheck
 ```
 
-## Notes
+## Docs for Humans and AI 🤝🤖
 
-- Uses macOS Keychain via `security`.
-- macOS only.
-- Entries are scoped to the `sk:` service prefix.
-- Override the prefix with `SK_SERVICE_PREFIX` if needed.
-- Override the default user with `SK_USER` if needed.
-- `sk list` does not access secret values.
+- CLI contract: `docs/specs/cli-contract.md`
+- Release checklist: `RELEASE.md`
+- Homebrew tap flow: `TAP.md`
+- GitHub Pages map: `docs/plan/github-pages-site-map.md`
+- Support page: `docs/support-the-project.md`
+- Wiki support snippet: `docs/wiki-support-snippet.md`
 
-## Security
+## Security Notes 🛡️
 
-- Prefer `--stdin` to avoid secrets in shell history.
+- macOS only (`security` command is required)
+- Prefer `--stdin` for sensitive values in automation
+- Use custom namespace via `SK_SERVICE_PREFIX` when sharing systems
+- Set `SK_USER` to target a specific account explicitly
 
-## Testing
+## Quality Checks ✅
 
 ```bash
+cargo fmt --check
+cargo test
 ./scripts/smoke.sh
 ```
 
-## License
+## Support This Project 💛
+
+- Donation options: `docs/support-the-project.md`
+- Direct support link: https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00
+- Wiki snippet for public support messaging: `docs/wiki-support-snippet.md`
+
+## License 📄
 
 MIT
