@@ -122,6 +122,7 @@ sk selfcheck
 
 - CLI contract: `docs/specs/cli-contract.md`
 - Release checklist: `RELEASE.md`
+- Tap snippet helper: `scripts/release-tap-snippet.sh`
 - Homebrew tap flow: `TAP.md`
 - GitHub Pages map: `docs/plan/github-pages-site-map.md`
 - Support page: `docs/support-the-project.md`
@@ -140,6 +141,7 @@ sk selfcheck
 cargo fmt --check
 cargo test
 ./scripts/smoke.sh
+make release-snippet TAG=v0.2.0
 ```
 
 ## Support This Project 💛

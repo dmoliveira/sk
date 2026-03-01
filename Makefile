@@ -1,7 +1,8 @@
 PROJECT := sk
 VERSION := 0.2.0
+TAG ?= v$(VERSION)
 
-.PHONY: help fmt test build smoke ci
+.PHONY: help fmt test build smoke ci release-snippet
 
 help: ## Show commands
 	@printf "%s %s\n" "$(PROJECT)" "v$(VERSION)"
@@ -11,6 +12,7 @@ help: ## Show commands
 	@printf "%-12s %s\n" "build" "Build release binary"
 	@printf "%-12s %s\n" "smoke" "Run keychain smoke test"
 	@printf "%-12s %s\n" "ci" "Run local CI checks"
+	@printf "%-12s %s\n" "release-snippet" "Print tap URL/SHA snippet"
 
 fmt: ## Run rustfmt
 	cargo fmt
@@ -27,3 +29,6 @@ smoke: ## Run keychain smoke test
 ci: ## Run local CI checks
 	cargo fmt --check
 	cargo test
+
+release-snippet: ## Print tap URL/SHA snippet
+	./scripts/release-tap-snippet.sh "$(TAG)"
