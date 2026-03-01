@@ -1,5 +1,5 @@
 PROJECT := sk
-VERSION := 0.2.0
+VERSION := 0.2.1
 TAG ?= v$(VERSION)
 
 .PHONY: help fmt test build smoke ci release-snippet
