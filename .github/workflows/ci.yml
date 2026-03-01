@@ -17,5 +17,7 @@ jobs:
         run: cargo fmt --check
       - name: Tests
         run: cargo test
+      - name: Docs trust links guard
+        run: ./scripts/check-doc-links.sh
       - name: Build release binary
         run: cargo build --release
