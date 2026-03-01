@@ -26,6 +26,16 @@ A short, printable runbook for daily use.
 - Issue replacements and invalidate dependent sessions.
 - Record remediation actions in incident notes.
 
+## Do / Don't quick table
+
+| Do | Don't |
+| --- | --- |
+| Inject secrets at runtime with stdin/env | Paste secrets directly into prompts |
+| Use separate keys per environment | Reuse one key across dev/stage/prod |
+| Rotate credentials on schedule | Keep long-lived tokens forever |
+| Redact logs/traces before sharing | Publish raw traces with sensitive fields |
+| Revoke immediately on suspicion | Wait for full incident analysis first |
+
 ## Copy/paste secure setup snippets
 
 ### Local shell (zsh/bash)
