@@ -18,7 +18,7 @@
 If `sk` helps your workflow, support ongoing maintenance and future improvements:
 
 - Stripe: [Support sk](https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00)
-- GitHub Sponsors: https://github.com/sponsors/dmoliveira
+- GitHub Sponsors: [@dmoliveira](https://github.com/sponsors/dmoliveira)
 
 A fast Rust CLI for macOS Keychain: add, fetch, list, rotate, and remove local secrets by key.
 
@@ -136,6 +136,7 @@ sk selfcheck
 ## Docs for Humans and AI 🤝🤖
 
 - CLI contract: `docs/specs/cli-contract.md`
+- Security guide for AI agents: `docs/security-for-ai-agents.md`
 - Release checklist: `RELEASE.md`
 - Release dashboard: `docs/release.md`
 - Changelog: `CHANGELOG.md`
@@ -145,6 +146,14 @@ sk selfcheck
 - Support page: `docs/support-the-project.md`
 - Wiki support snippet: `docs/wiki-support-snippet.md`
 - Changelog and releases: `https://github.com/dmoliveira/sk/releases`
+
+## AI/ML + Agent Safety Tips 🤖🛡️
+
+- Keep agent runtime secrets ephemeral and scoped to one task.
+- Pass secrets via `--stdin` or process env, never inside prompts.
+- Prefer dedicated keys per environment (dev/staging/prod).
+- Redact model traces and logs before sharing across tools.
+- Treat notebooks and chat history as potentially persistent data.
 
 ## Security Notes 🛡️
 

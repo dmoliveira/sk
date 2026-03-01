@@ -35,3 +35,10 @@ git push origin v0.2.1
 
 - Donate now via Stripe: [Support sk](https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00)
 - Sponsor on GitHub: [@dmoliveira](https://github.com/sponsors/dmoliveira)
+
+## Security checks before tagging
+
+- Verify no secrets in release notes, docs, or commit diffs.
+- Confirm formula and docs point to public assets only.
+- Re-run `make ci` before tagging and publishing.
+- Validate support links and wiki/docs URLs are current.
