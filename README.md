@@ -141,7 +141,7 @@ sk selfcheck
 cargo fmt --check
 cargo test
 ./scripts/smoke.sh
-make release-snippet TAG=v0.2.0
+make release-snippet TAG=v0.2.1
 ```
 
 ## Support This Project 💛
