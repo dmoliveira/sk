@@ -11,6 +11,18 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate tap snippet
+        run: make release-snippet TAG="${GITHUB_REF_NAME}" > /tmp/release-tap-snippet.txt
+
+      - name: Upload tap snippet artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-tap-snippet-${{ github.ref_name }}
+          path: /tmp/release-tap-snippet.txt
+
       - name: Compute tarball SHA256
         id: sha
         run: |
@@ -30,3 +42,5 @@ jobs:
             url "https://github.com/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.tar.gz"
             sha256 "${{ steps.sha.outputs.sha256 }}"
             ```
+
+            Artifact `release-tap-snippet-${{ github.ref_name }}` contains the full helper output.
