@@ -135,17 +135,17 @@ sk selfcheck
 
 ## Docs for Humans and AI 🤝🤖
 
-- CLI contract: `docs/specs/cli-contract.md`
-- Security guide for AI agents: `docs/security-for-ai-agents.md`
-- Release checklist: `RELEASE.md`
-- Release dashboard: `docs/release.md`
-- Changelog: `CHANGELOG.md`
-- Tap snippet helper: `scripts/release-tap-snippet.sh`
-- Homebrew tap flow: `TAP.md`
-- GitHub Pages map: `docs/plan/github-pages-site-map.md`
-- Support page: `docs/support-the-project.md`
-- Wiki support snippet: `docs/wiki-support-snippet.md`
-- Changelog and releases: `https://github.com/dmoliveira/sk/releases`
+- CLI contract: [`docs/specs/cli-contract.md`](docs/specs/cli-contract.md)
+- Security guide for AI agents: [`docs/security-for-ai-agents.md`](docs/security-for-ai-agents.md)
+- Release checklist: [`RELEASE.md`](RELEASE.md)
+- Release dashboard: [`docs/release.md`](docs/release.md)
+- Changelog: [`CHANGELOG.md`](CHANGELOG.md)
+- Tap snippet helper: [`scripts/release-tap-snippet.sh`](scripts/release-tap-snippet.sh)
+- Homebrew tap flow: [`TAP.md`](TAP.md)
+- GitHub Pages map: [`docs/plan/github-pages-site-map.md`](docs/plan/github-pages-site-map.md)
+- Support page: [`docs/support-the-project.md`](docs/support-the-project.md)
+- Wiki support snippet: [`docs/wiki-support-snippet.md`](docs/wiki-support-snippet.md)
+- Changelog and releases: [`https://github.com/dmoliveira/sk/releases`](https://github.com/dmoliveira/sk/releases)
 
 ## AI/ML + Agent Safety Tips 🤖🛡️
 
@@ -173,9 +173,9 @@ make release-snippet TAG=v0.2.1
 
 ## Support This Project 💛
 
-- Donation options: `docs/support-the-project.md`
-- Direct support link: https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00
-- Wiki snippet for public support messaging: `docs/wiki-support-snippet.md`
+- Donation options: [`docs/support-the-project.md`](docs/support-the-project.md)
+- Direct support link: [Support sk](https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00)
+- Wiki snippet for public support messaging: [`docs/wiki-support-snippet.md`](docs/wiki-support-snippet.md)
 
 ## License 📄
 
