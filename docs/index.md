@@ -9,6 +9,14 @@ If these docs and tools save you time, consider supporting the project:
 - Donate now via Stripe: [Support sk](https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00)
 - Sponsor on GitHub: [@dmoliveira](https://github.com/sponsors/dmoliveira)
 
+## Security Quickstart for Agents (30 seconds) ⚡
+
+- Store secrets once with `sk add -k KEY --stdin --force`.
+- Read secrets only at execution time via `$(sk get -k KEY)`.
+- Never paste secrets into prompts, docs, notebooks, or issue comments.
+- Use separate keys per environment and rotate them on a schedule.
+- Revoke and replace immediately if logs or traces may have exposed data.
+
 ## Quick Links
 
 - Main README: `../README.md`
