@@ -13,6 +13,13 @@
 [![Stars](https://img.shields.io/github/stars/dmoliveira/sk?style=social)](https://github.com/dmoliveira/sk/stargazers)
 [![Support via Stripe](https://img.shields.io/badge/support-stripe-635bff?logo=stripe&logoColor=white)](https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00)
 
+## Support sk 💛
+
+If `sk` helps your workflow, support ongoing maintenance and future improvements:
+
+- Stripe: [Support sk](https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00)
+- GitHub Sponsors: https://github.com/sponsors/dmoliveira
+
 A fast Rust CLI for macOS Keychain: add, fetch, list, rotate, and remove local secrets by key.
 
 Made by Diego Marinho de Oliveira.
@@ -20,6 +27,13 @@ Made by Diego Marinho de Oliveira.
 Hero asset note: `docs/assets/hero-banner.svg` is an editable SVG derived from a GPT-Image-1.5 style prompt for this project identity.
 
 ## Quick Start 🚀
+
+## Trust & Security at a Glance 🔎
+
+- Local-only secret storage via macOS Keychain (`security`)
+- No cloud sync, external vault backend, or remote secret transport
+- Safe automation path: pass values using `--stdin`
+- Namespacing and user targeting supported via `SK_SERVICE_PREFIX` and `SK_USER`
 
 ```bash
 cargo build --release
@@ -123,6 +137,8 @@ sk selfcheck
 
 - CLI contract: `docs/specs/cli-contract.md`
 - Release checklist: `RELEASE.md`
+- Release dashboard: `docs/release.md`
+- Changelog: `CHANGELOG.md`
 - Tap snippet helper: `scripts/release-tap-snippet.sh`
 - Homebrew tap flow: `TAP.md`
 - GitHub Pages map: `docs/plan/github-pages-site-map.md`
