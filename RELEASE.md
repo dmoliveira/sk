@@ -9,8 +9,10 @@
 4. Tag a release (example: `v0.2.0`) and push tags:
    - `git tag v0.2.0`
    - `git push --tags`
-5. The GitHub release workflow publishes release notes and prints tarball `sha256`.
+5. Generate tap-ready release metadata:
+   - `make release-snippet TAG=v0.2.0`
+   - This prints the tarball `url` and `sha256` block.
 6. Update Homebrew formula in your tap repo:
    - Set `url` to the new tag tarball.
-   - Update `sha256` from release notes.
+   - Paste the generated `sha256` value.
 7. Commit and push tap repo changes.
