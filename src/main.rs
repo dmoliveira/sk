@@ -379,7 +379,10 @@ fn mask_value(value: &str) -> String {
 fn list_services() -> Result<Vec<String>, String> {
     let output = run_security(&["dump-keychain"])?;
     let raw = String::from_utf8_lossy(&output.stdout);
-    let prefix = service_prefix();
+    Ok(parse_services_from_dump(raw.as_ref(), &service_prefix()))
+}
+
+fn parse_services_from_dump(raw: &str, prefix: &str) -> Vec<String> {
     let mut set = BTreeSet::new();
 
     for line in raw.lines() {
@@ -388,18 +391,17 @@ fn list_services() -> Result<Vec<String>, String> {
         }
         if let Some(start) = line.find("\"svce\"<blob>=\"") {
             let head = &line[(start + 14)..];
-            if let Some(end) = head.find('\"') {
+            if let Some(end) = head.find('"') {
                 let service = head[..end].to_string();
-                if service.starts_with(&prefix) {
+                if service.starts_with(prefix) {
                     set.insert(service);
                 }
             }
         }
     }
 
-    Ok(set.into_iter().collect())
+    set.into_iter().collect()
 }
-
 fn key_exists(user: &str, service: &str) -> Result<bool, String> {
     let status = Command::new("security")
         .arg("find-generic-password")
@@ -436,7 +438,7 @@ fn print_stdout(output: Output) {
 
 #[cfg(test)]
 mod tests {
-    use super::{mask_value, validate_key};
+    use super::{mask_value, parse_services_from_dump, validate_key};
 
     #[test]
     fn validates_key_rules() {
@@ -450,5 +452,36 @@ mod tests {
         assert_eq!(mask_value(""), "****");
         assert_eq!(mask_value("abcd"), "abcd****");
         assert_eq!(mask_value("abcdefgh"), "abcd****");
+    }
+
+    #[test]
+    fn parses_and_deduplicates_services_for_prefix() {
+        let dump = "keychain: \"test\"
+\"svce\"<blob>=\"sk:OPENAI_API_KEY\"
+\"svce\"<blob>=\"other:SOMETHING\"
+\"svce\"<blob>=\"sk:OPENAI_API_KEY\"
+\"svce\"<blob>=\"sk:DATABASE_URL\"
+";
+
+        let parsed = parse_services_from_dump(dump, "sk:");
+        assert_eq!(
+            parsed,
+            vec![
+                "sk:DATABASE_URL".to_string(),
+                "sk:OPENAI_API_KEY".to_string()
+            ]
+        );
+    }
+
+    #[test]
+    fn ignores_malformed_or_unrelated_service_lines() {
+        let dump = "\"svce\"<blob>=\"
+\"acct\"<blob>=\"sk:SHOULD_NOT_PARSE\"
+random line
+\"svce\"<blob>=\"team:VALUE\"
+";
+
+        let parsed = parse_services_from_dump(dump, "sk:");
+        assert!(parsed.is_empty());
     }
 }
