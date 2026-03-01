@@ -25,3 +25,33 @@ A short, printable runbook for daily use.
 - Revoke exposed credentials immediately.
 - Issue replacements and invalidate dependent sessions.
 - Record remediation actions in incident notes.
+
+## Copy/paste secure setup snippets
+
+### Local shell (zsh/bash)
+
+```bash
+# Store once (stdin avoids shell history leaks)
+printf '%s' "$OPENAI_API_KEY" | sk add -k OPENAI_API_KEY --stdin --force
+
+# Load only in the active process/session
+export OPENAI_API_KEY="$(sk get -k OPENAI_API_KEY)"
+
+# Optional cleanup when done
+unset OPENAI_API_KEY
+```
+
+### CI job pattern (GitHub Actions)
+
+```yaml
+- name: Load runtime secret from sk
+  run: |
+    export OPENAI_API_KEY="$(sk get -k OPENAI_API_KEY)"
+    your_command_here
+```
+
+### Rotation helper
+
+```bash
+printf '%s' "$NEW_OPENAI_API_KEY" | sk add -k OPENAI_API_KEY --stdin --force
+```
