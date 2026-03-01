@@ -23,3 +23,15 @@ git push origin v0.2.1
 - Changelog: `CHANGELOG.md`
 - Tap flow: `TAP.md`
 - Formula template: `Formula/sk.rb`
+
+## Live links
+
+- Releases: `https://github.com/dmoliveira/sk/releases`
+- Release workflow: `https://github.com/dmoliveira/sk/actions/workflows/release.yml`
+- Docs site: `https://dmoliveira.github.io/sk/`
+- Homebrew tap repo: `https://github.com/dmoliveira/homebrew-tap`
+
+## Support sustainable maintenance
+
+- Donate now via Stripe: [Support sk](https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00)
+- Sponsor on GitHub: [@dmoliveira](https://github.com/sponsors/dmoliveira)
