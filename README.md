@@ -4,6 +4,7 @@
 
 [![CI](https://github.com/dmoliveira/sk/actions/workflows/ci.yml/badge.svg)](https://github.com/dmoliveira/sk/actions/workflows/ci.yml)
 [![Release](https://github.com/dmoliveira/sk/actions/workflows/release.yml/badge.svg)](https://github.com/dmoliveira/sk/actions/workflows/release.yml)
+[![Latest Release](https://img.shields.io/github/v/release/dmoliveira/sk?label=latest)](https://github.com/dmoliveira/sk/releases/latest)
 [![Docs Site](https://img.shields.io/badge/docs-github_pages-0ea5e9)](https://dmoliveira.github.io/sk/)
 [![Wiki](https://img.shields.io/badge/wiki-project-22c55e)](https://github.com/dmoliveira/sk/wiki)
 [![License: MIT](https://img.shields.io/badge/License-MIT-16a34a.svg)](LICENSE)
@@ -127,6 +128,7 @@ sk selfcheck
 - GitHub Pages map: `docs/plan/github-pages-site-map.md`
 - Support page: `docs/support-the-project.md`
 - Wiki support snippet: `docs/wiki-support-snippet.md`
+- Changelog and releases: `https://github.com/dmoliveira/sk/releases`
 
 ## Security Notes 🛡️
 
