@@ -1,44 +1,43 @@
-# sk Docs 🔐
+# sk Docs Hub 🔐
 
-Welcome to the GitHub Pages docs hub for `sk`.
+![sk Hero](./assets/hero-banner.svg)
 
-## Support sk First 💛
+Welcome to the `sk` docs site: a fast path to secure local secret handling for
+AI agents, ML workflows, and software teams.
 
-If these docs and tools save you time, consider supporting the project:
+[![Latest Release](https://img.shields.io/github/v/release/dmoliveira/sk?label=latest)](https://github.com/dmoliveira/sk/releases/latest)
+[![Project Wiki](https://img.shields.io/badge/wiki-open-22c55e)](https://github.com/dmoliveira/sk/wiki)
+[![Support](https://img.shields.io/badge/support-stripe-635bff?logo=stripe&logoColor=white)](https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00)
 
-- Donate now via Stripe: [Support sk](https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00)
-- Sponsor on GitHub: [@dmoliveira](https://github.com/sponsors/dmoliveira)
+## Start in 60 Seconds
 
-## Security Quickstart for Agents (30 seconds) ⚡
+1. Install: `brew tap dmoliveira/tap && brew install sk`
+2. Store a secret: `printf '%s' "$KEY" | sk add -k OPENAI_API_KEY --stdin --force`
+3. Read at runtime: `export OPENAI_API_KEY="$(sk get -k OPENAI_API_KEY)"`
 
-- Store secrets once with `sk add -k KEY --stdin --force`.
-- Read secrets only at execution time via `$(sk get -k KEY)`.
-- Never paste secrets into prompts, docs, notebooks, or issue comments.
-- Use separate keys per environment and rotate them on a schedule.
-- Revoke and replace immediately if logs or traces may have exposed data.
-
-## Security & Trust Links
+## Security Center
 
 - [Security guide](./security-for-ai-agents.md)
 - [Agent FAQ](./agent-security-faq.md)
 - [Checklist card](./agent-security-checklist.md)
 
-## Quick Links
+## For AI Agents and ML Teams
 
-- Main README: `../README.md`
-- CLI contract: `./specs/cli-contract.md`
-- Release dashboard: `./release.md`
-- Security guide: `./security-for-ai-agents.md`
-- Agent security FAQ: `./agent-security-faq.md`
-- Security checklist card: `./agent-security-checklist.md`
-- Changelog: `../CHANGELOG.md`
-- Release checklist: `../RELEASE.md`
-- Support page: `./support-the-project.md`
-- Pages plan: `./plan/github-pages-site-map.md`
-- GitHub wiki: `https://github.com/dmoliveira/sk/wiki`
-- Latest release: `https://github.com/dmoliveira/sk/releases/latest`
+- Keep secrets outside prompts and notebooks.
+- Use environment-specific keys and least privilege.
+- Rotate and revoke quickly after suspicious exposure.
+- Redact traces/logs before sharing in PRs or chat threads.
 
-## Common Commands
+## Popular Docs
+
+- [CLI contract](./specs/cli-contract.md)
+- [Release dashboard](./release.md)
+- [Release checklist](../RELEASE.md)
+- [Changelog](../CHANGELOG.md)
+- [Support page](./support-the-project.md)
+- [Pages plan](./plan/github-pages-site-map.md)
+
+## Maintainer Commands
 
 ```bash
 make ci
@@ -46,13 +45,7 @@ make release-snippet TAG=v0.2.1
 ./scripts/smoke.sh
 ```
 
-## Install Paths
+## Support sk 💛
 
-- Homebrew tap install: `brew tap dmoliveira/tap && brew install sk`
-- Cargo install: `cargo install --path .`
-- Local binary install: `./target/release/sk install`
-
-## Support
-
-- Donate now via Stripe: [Support sk](https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00)
-- Sponsor on GitHub: [@dmoliveira](https://github.com/sponsors/dmoliveira)
+- Stripe: [Support sk](https://buy.stripe.com/8x200i8bSgVe3Vl3g8bfO00)
+- GitHub Sponsors: [@dmoliveira](https://github.com/sponsors/dmoliveira)
